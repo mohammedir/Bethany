@@ -148,7 +148,14 @@ $(function () {
                             {
                                 data: 'full_name',
                                 name: 'full_name',
-                            }, {
+                            },
+                            {
+                                data: 'added_by',
+                                name: 'added_by',
+                            },{
+                                data: 'QRCode',
+                                name: 'QRCode',
+                            },{
                                 data: 'action',
                                 name: 'action',
                                 orderable: false,

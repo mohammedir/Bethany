@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\PermissionAdminController;
 use App\Http\Controllers\admin\PlacesAdminController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\RolesAdminController;
+use App\Http\Controllers\admin\TouristSiteAdminController;
 use App\Http\Controllers\admin\UploaderAdminController;
 use App\Http\Controllers\admin\UserAdminController;
 use App\Http\Controllers\AuthController;
@@ -69,9 +70,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 ->group(function () {
                     Route::get('/', 'index')->name('dashboard');
                 });
-           /* Route::prefix('admins')
-                ->name('admins')
-                ->controller(AdminsAdminController::class)
+           Route::prefix('users')
+                ->name('users')
+                ->controller(UserAdminController::class)
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/getItems', 'getItems')->name('getItems');
@@ -82,7 +83,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
                     Route::post('update/{id}', 'update')->name('update');
                     Route::post('status/{id}', 'status')->name('status');
                     Route::get('filter/core/{id}', 'index')->name('filter');
-                });*/
+                });
+            Route::prefix('tourist_site')
+                ->name('tourist_site')
+                ->controller(TouristSiteAdminController::class)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/getItems', 'getItems')->name('getItems');
+                    Route::get('show/{id}', 'show')->name('show');
+                    Route::get('create', 'create')->name('create');
+                    Route::post('store', 'store')->name('store');
+                    Route::get('edit/{id}', 'edit')->name('edit')->middleware('permission:form one_edit');
+                    Route::post('update/{id}', 'update')->name('update');
+                    Route::post('status/{id}', 'status')->name('status');
+                    Route::get('filter/core/{id}', 'index')->name('filter');
+                });
 
             Route::prefix('places')
                 ->name('places')
@@ -100,21 +115,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 });
 
 
-            Route::prefix('form_one')
-                ->name('form_one')
-                ->controller(FormOneAdminController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/getItems', 'getItems')->name('getItems');
-                    Route::get('show/{id}', 'show')->name('show')->middleware('permission:form one_view');
-                    Route::get('create', 'create')->name('create')->middleware('permission:form one_create');
-                    Route::post('store', 'store')->name('store');
-                    Route::get('edit/{id}', 'edit')->name('edit')->middleware('permission:form one_edit');
-                    Route::post('update/{id}', 'update')->name('update');
-                    Route::post('status/{id}', 'status')->name('status');
-                    Route::get('filter/core/{id}', 'index')->name('filter');
-                });
-
             Route::prefix('upload')
                 ->name('upload')
                 ->controller(UploaderAdminController::class)
@@ -124,7 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             Route::prefix('admins')
                 ->name('admins')
-                ->controller(UserAdminController::class)
+                ->controller(AdminsAdminController::class)
                 ->group(function () {
                     Route::get('/', 'index')->name('  ');
                     Route::get('edit/{id}', 'edit')->name('edit');

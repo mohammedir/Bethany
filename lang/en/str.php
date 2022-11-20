@@ -184,56 +184,23 @@ return [
     'Form One' => 'Child and family identification form',
     'Title Input' => 'Title Input',
     'Form Num Part Num' => 'Form Num Part Num',
-    '' => '',
-    //Start Form One
-    'Filter by date of birth' => 'date of birth',
-    'Filter by governorate' => 'governorate',
-    'Filter by citizenship' => 'citizenship',
-    'Filter by gender' => 'gender',
-    'Filter by' => 'Filter by',
-    '' => '',
-    //Start Form One Part One
-    'Form One Part One' => 'Kid data',
-    'Full name' => 'Full name',
-    'ID number' => 'ID number',
-    'Date of birth' => 'Date of birth',
-    'Age' => 'Age',
-    'Place of Birth' => 'Place of Birth',
-    'Citzienship' => 'Citizenship',
-    'Gender' => 'Gender',
-    'Notes' => 'Notes',
-    'Disability type' => 'Disability type',
-    //Start Form One Part Two
-    'Form Two Part Two' => 'Family data',
-    'Relationship' => 'Relationship',
-    'Living Status' => 'Living Status',
-    'Add More' => 'Add More',
-    //Start Form One Part Three
-    'Form Three Part Three' => 'Child contact information',
-    'Governorate' => 'Governorate',
-    'City' => 'City',
-    'Area' => 'Area',
-    'Phone' => 'Phone',
-    //Start Form One Part Four
-    'Form Three Part Four' => 'Kid school details',
-    'School name' => 'School name',
-    'School Address' => 'School Address',
-    'Contact person' => 'Contact person',
-    //Start Form One Part Five
-    'Form Three Part Five' => 'Child/family work details',
-    'Employment status' => 'Employment status',
-    'Employer Name' => 'Employer Name',
-    'Applicant name' => 'Applicant name',
-    //Submit Form One
-    'All family data fields are required, check the entered data!' => 'All family data fields are required, check the entered data!',
-    'This field is required' => 'This field is required',
-    'Enter valid ID Number!' => 'Enter valid ID Number!',
-    //End Submit
-    //End Form One
-    //End Forms
+
+    'Tables' => 'Tables',
     /*Start Admins*/
     'Admins list' => 'Admins list',
     '' => '',
     '' => '',
     '' => '',
+    /*End Admins*/
+    /*Start Tourist Site*/
+    'Tourist Site'=> 'Tourist Site',
+    /*End Tourist Site*/
+    /*Start Places*/
+    'Added By' => 'Added By',
+    'QRCode' => 'QRCode',
+    'Places' => 'Places',
+    'Add Places' => 'Add Places',
+    'Places Name' => 'Places Name',
+    /*End Places*/
+
 ];

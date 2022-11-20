@@ -18,75 +18,51 @@ use Yajra\DataTables\DataTables;
 
 class UserAdminController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('xc')->only("create");
-    }
-
     public function index(Request $request)
     {
-        $users = Admin::query()->latest();
-        $roles = Role::query()->get();
+        $data = User::query()->latest()->get();
         if ($request->ajax()) {
-            return DataTables::of($users)
-                ->addColumn('id', function ($users) {
-                    $path_edit = "#";
-                    if (auth()->guard("admin")->user()->can('user_edit'))
-                        $path_edit = url("/admin/users/edit/" . $users->id);
-                    return '<a href="' . $path_edit . '" class="text-gray-600 text-hover-primary mb-1 "><div>ID-' . $users->id . '</div></div>';
-                })
-                ->addColumn('name', function ($users) {
-                    $path_edit = "#";
-                    if (auth()->guard("admin")->user()->can('user_edit'))
-                        $path_edit = url("/admin/users/edit/" . $users->id);
-                    return '<div class="d-flex align-items-center">
-											<!--begin:: Avatar -->
-											<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-												<a href="' . $path_edit . '">
-													<div class="symbol-label">
-														<img src="' . asset("uploads/users/" . $users->image) . '" alt="' . $users->name . '" class="w-100">
-													</div>
-												</a>
-											</div>
-											<!--end::Avatar-->
-											<!--begin::User details-->
-											<div class="d-flex flex-column">
-												<a href="' . $path_edit . '" class="text-gray-800 text-hover-primary mb-1">' . $users->name . $users->last_name . '</a>
-												<span>' . $users->email . '</span>
-											</div>
-											<!--begin::User details-->
-										</div>';
-                })
-                ->addColumn('created_at', function ($users) {
-                    return '<div class="text-center"><div>' . $users->created_at . '</div></div>';
-                })
-                ->addColumn('roles', function ($users) {
-                    if (count($users->role) > 0)
-                        foreach ($users->role as $role) {
-                            return '<div class="badge badge-light-primary">' . $role->role->name . '</div>';
-                        }
+            return DataTables::of($data)
+                ->addColumn('id', function ($data) {
+
+                    if (auth()->guard("admin")->user()->can('form one_view'))
+                        return '<!--begin::Location name=-->
+                                    <div class="d-flex">
+                                        <div class="">
+                                            <!--begin::Title-->
+                                           <a class="text-gray-600 text-hover-primary fs-5 fw-bolder mb-1"
+                                           href="' . url("admin/form_one/show/" . $data->id) . '">' . $data->id . '
+                                           </a>
+                                            <!--end::Title-->
+                                        </div>
+                                    </div>
+                                <!--end::Location=-->';
                     else
-                        return '<div class="text-center text-gray-600"><div>no roles</div></div>';
+                        return '<!--begin::Location name=-->
+                                    <div class="d-flex">
+                                        <div class="">
+                                            <!--begin::Title-->
+                                           <a href="" class="text-gray-600 text-hover-primary fs-5 fw-bolder mb-1" data-id="' . $data->id . '"
+                                                data-status="' . $data->status . '" data-kt-ecommerce-category-filter="category_name">' . $data->id . '
+                                           </a>
+                                            <!--end::Title-->
+                                        </div>
+                                    </div>
+                                <!--end::Location=-->';
                 })
-                ->addColumn('status', function ($users) {
-                    switch ($users->status) {
-                        case 0:
-                            return '<!--begin::Status=-->
-                                <div class="text-center"><div class="text-end pe-0" data-order="Inactive">
-                                    <!--begin::Badges-->
-                                    <div class="badge badge-light-danger">Inactive</div>
-                                    <!--end::Badges-->
-                                </div></div>
-                                <!--end::Status=-->';
-                        case 1:
-                            return '<div class="text-center"><div class="text-end pe-0" data-order="Published">
-                                    <!--begin::Badges-->
-                                    <div class="badge badge-light-success">Published</div>
-                                    <!--end::Badges-->
-                                </div></div>';
-                    }
+                ->addColumn('name', function ($data) {
+                    return  $data->name ;
                 })
-                ->addColumn('action', function ($users) {
+                ->addColumn('email', function ($data) {
+                    $action = '<div class="text-center">'. $data->email .'</div>';
+                    return $action;
+
+                })
+                ->addColumn('created_at', function ($data) {
+                    $action = '<div class="text-center">'. $data->created_at .'</div>';
+                    return $action;
+                })
+                ->addColumn('action', function ($data) {
                     $action = '<div class="text-center">
                             <div class="btn-group dropstart text-center">
                                   <button type="button" class="btn btn-sm btn-light btn-active-light-primary" data-bs-toggle="dropdown" aria-expanded="false">
@@ -101,237 +77,23 @@ class UserAdminController extends Controller
                                   <div class="dropdown-menu">';
                     if (auth()->guard("admin")->user())
                         $action = $action . '<div class="menu-item px-3">
-                                            <a href="' . url("/admin/users/edit/" . $users->id) . '" id="edit" data-id="' . $users->id . '"
-                                             data-name="' . $users->name . '" class="menu-link px-3">' . trans("str.Edit") . '</a>
+                                            <a href="' . url("admin/form_one/show/" . $data->id) . '"
+                                               class="menu-link px-3">' . trans("str.View") . '</a>
                                         </div>';
-                    if (auth()->guard("admin")->user() && $users->type == 1)
+                    if (auth()->guard("admin")->user())
                         $action = $action . '<div class="menu-item px-3">
-                                            <a id="delete" href="#" data-id="' . $users->id . '" data-name="' . $users->name . '" class="menu-link px-3">' . trans("str.Delete") . '</a>
+                                            <a href="' . url("admin/form_one/edit/" . $data->id) . '"
+                                               class="menu-link px-3">' . trans("str.Edit") . '</a>
                                         </div>';
                     $action = $action . '</div></div></div>';
                     return $action;
                 })
-                ->rawColumns(['id'], ['name'], ['created_at'], ['roles'], ['status'], ['action'])
-                ->escapeColumns(['id' => 'id'], ['name' => 'name'], ['created_at' => 'created_at'], ['roles' => 'roles'], ['status' => 'status'], ['action' => 'action'])
+                ->rawColumns(['id'], ['name'], ['email'], ['created_at'], ['action'])
+                ->escapeColumns(['id' => 'id'], ['name' => 'name'], ['email' => 'email'], ['created_at' => 'created_at'],['action' => 'action'])
                 ->make(true);
         }
-        return view("admin.users.users.list", compact("users", "roles"));
+        return view("admin.forms.users.list");
     }
 
-    public function edit($id)
-    {
-        $user = Admin::query()->find($id);
-        $roles = Role::query()->get();
-        //dd($user);
-        //return view("admin.users.users.user_item", compact("user", "roles"))->render();
-        return view("admin.users.users.view", compact("user", "roles"));
-    }
 
-    public function roles()
-    {
-        return view("admin.users.roles.list");
-    }
-
-    public function roles_view()
-    {
-        return view("admin.users.roles.view");
-    }
-
-    public function permissions()
-    {
-        return view("admin.users.permissions");
-    }
-
-    public function create()
-    {
-
-    }
-
-    public function store(Request $request)
-    {
-        if ($request->ajax()) {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string:admins,name|max:255',
-                'email' => 'required|string|unique:admins,email|max:255',
-                'mobile' => 'required|int|unique:admins,mobile|digits:8',
-                'roles_id' => 'required',
-                'password' => 'string|min:8|confirmed',
-            ]);
-            if ($validator->passes()) {
-                $data = new Admin();
-                $image = uniqid() . '.jpg';
-                $image_path = env("asset_url") . "/uploads/users/" . $image;
-                file_put_contents($image_path, base64_decode($request->customer_image));
-                $data->image = $image;
-                $data->id = time();
-                $data->name = $request->name;
-                $data->email = $request->email;
-                $data->mobile = $request->mobile;
-                $data->password = Hash::make($request->password);
-                $data->status = 1;
-                $data->roles_id = $request->roles_id;
-                $data->roles_name = $request->roles_name;
-                $data->created_at = Carbon::now();
-                $data->updated_at = Carbon::now();
-                $data->save();
-                $data->assignRole($request->roles_id);
-                $role = Role::query()->find($request->roles_id);
-                foreach ($role->role_permissions as $permission) {
-                    $user_permi = new AdminPermissions();
-                    $user_permi->permission_id = $permission->permission_id;
-                    $user_permi->model_type = "App\Models\Admin";
-                    $user_permi->model_id = $data->id;
-                    $user_permi->save();
-                }
-                /*$admin_role = new AdminRoles();
-                $admin_role->role_id = $request->roles_id;
-                $admin_role->model_id = $data->id;
-                $admin_role->model_type = "App\Models\Admin";
-                $admin_role->save();*/
-                return response()->json(['success' => $data]);
-            }
-            return response()->json(['error' => $validator->errors()->toArray()]);
-        }
-    }
-
-    public function show($id)
-    {
-        $customer = Admin::query()->find($id);
-        return $customer;
-    }
-
-    public function update(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $data = Admin::query()->find($id);
-            $old_email = $data->email;
-            $old_mobile = $data->mobile;
-            $old_image = env("asset_url") . "/uploads/users/" . $data->image;
-            $validator = [];
-            if ($request->password) {
-                if (($old_email != $request->email) && $request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                        'roles_id' => 'required',
-                        'password' => 'string|min:8|confirmed',
-                    ]);
-                } else if (($old_mobile != $request->mobile) && $request->mobile) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8',
-                        'roles_id' => 'required',
-                    ]);
-                } else if (!$request->mobile && !$request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8',
-                        'password' => 'string|min:8|confirmed',
-                    ]);
-                } else if (!$request->mobile) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8'
-                    ]);
-                } else if (!$request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                    ]);
-                } else {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                    ]);
-                }
-            } else {
-                if (($old_email != $request->email) && $request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                    ]);
-                } else if (($old_mobile != $request->mobile) && $request->mobile) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8',
-                    ]);
-                } else if (!$request->mobile && !$request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8'
-                    ]);
-                } else if (!$request->mobile) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'mobile' => 'required|int|unique:admins,mobile|digits:8'
-                    ]);
-                } else if (!$request->email) {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                        'email' => 'required|string|unique:admins,email|max:255',
-                    ]);
-                } else {
-                    $validator = Validator::make($request->all(), [
-                        'name' => 'required|string:admins,name|max:255',
-                        'roles_id' => 'required',
-                    ]);
-                }
-            }
-            if ($validator->passes()) {
-                if (!str_contains($request->user_image, env("APP_URL"))) {
-                    unlink($old_image);
-                    $image = uniqid() . '.jpg';
-                    $image_path = env("asset_url") . "/uploads/users/" . $image;
-                    file_put_contents($image_path, base64_decode($request->user_image));
-                    $data->image = $image;
-                }
-                /*$image = uniqid() . '.jpg';
-                $image_path = env("asset_url") . "/uploads/users/" . $image;
-                file_put_contents($image_path, base64_decode($request->user_image));
-                $data->image = $image;*/
-                $data->full_name = $request->name;
-               /* $data->last_name = $request->last_name;*/
-                $data->email = $request->email;
-                $data->mobile = $request->mobile;
-                $data->status = 1;
-                $data->updated_at = Carbon::now();
-                if ($request->password) {
-                    $data->password = Hash::make($request->password);
-                }
-                $data->save();
-                $old_roles = AdminRoles::query()->where("model_id", $id)->delete();
-                $old_permissions = AdminPermissions::query()->where("model_id", $id)->delete();
-                $role = Role::query()->find($request->roles_id);
-                $data->assignRole($request->roles_id);
-                foreach ($role->role_permissions as $permission) {
-                    $user_permi = new AdminPermissions();
-                    $user_permi->permission_id = $permission->permission_id;
-                    $user_permi->model_type = "App\Models\Admin";
-                    $user_permi->model_id = $id;
-                    $user_permi->save();
-                }
-                return response()->json(['success' => $data]);
-            }
-            return response()->json(['error' => $validator->errors()->toArray()]);
-        }
-    }
-
-    public function destroy($id)
-    {
-        $data = Admin::query()->find($id)->delete();
-        if ($data)
-            return response()->json(['success' => 'success']);
-        else
-            return response()->json(['error' => 'error']);
-    }
 }

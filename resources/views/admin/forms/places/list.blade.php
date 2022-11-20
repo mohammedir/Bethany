@@ -1,9 +1,9 @@
 @extends('admin.layout.main')
-@section('title',__("str.Form One"))
-@section('description',__("str.Form One"))
-@section('author',__("str.Form One"))
-@section('keywords',__("str.Form One"))
-@section('copyright',__("str.Form One"))
+@section('title',__("str.Places"))
+@section('description',__("str.Places"))
+@section('author',__("str.Places"))
+@section('keywords',__("str.Places"))
+@section('copyright',__("str.Places"))
 @section('css')
 @endsection
 @section('content')
@@ -18,7 +18,7 @@
                      data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                      class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                     <!--begin::Title-->
-                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{__('str.Form One')}}</h1>
+                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{__('str.Places')}}</h1>
                     <!--end::Title-->
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -33,7 +33,7 @@
                         <li class="breadcrumb-item">
                             <span class="bullet bg-gray-300 w-5px h-2px"></span>
                         </li>
-                        <li class="breadcrumb-item text-dark">{{__('str.Form One')}}</li>
+                        <li class="breadcrumb-item text-dark">{{__('str.Places')}}</li>
                         <!--end::Item-->
                     </ul>
                     <!--end::Breadcrumb-->
@@ -102,6 +102,8 @@
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="text-start">{{__('str.ID')}}</th>
                                 <th class="text-start ps-2">{{__('str.Name')}}</th>
+                                <th class="text-start ps-2">{{__('str.Added By')}}</th>
+                                <th class="text-start ps-2">{{__('str.QRCode')}}</th>
                                 <th class="text-center">{{__('str.Actions')}}</th>
                             </tr>
                             <!--end::Table row-->

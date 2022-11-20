@@ -104,16 +104,26 @@
 											</span>
                                             <!--end::Svg Icon-->
 										</span>
-										<span class="menu-title">{{__('str.Forms')}}</span>
+										<span class="menu-title">{{__('str.Tables')}}</span>
 										<span class="menu-arrow"></span>
 									</span>
             <div class="menu-sub menu-sub-accordion menu-active-bg">
                 <div class="menu-item">
-                    <a class="menu-link {{str_contains($url,"admins") ? "active":""}}" href="{{url("admin/admins")}}">
+                    <a class="menu-link {{str_contains($url,"users") ? "active":""}}" href="{{url("admin/users")}}">
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-                        <span class="menu-title">admins</span>
+                        <span class="menu-title">Users</span>
+                    </a>
+                </div>
+            </div>
+            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                <div class="menu-item">
+                    <a class="menu-link {{str_contains($url,"tourist_site") ? "active":""}}" href="{{url("admin/tourist_site")}}">
+														<span class="menu-bullet">
+															<span class="bullet bullet-dot"></span>
+														</span>
+                        <span class="menu-title">@lang('str.Tourist Site')</span>
                     </a>
                 </div>
             </div>

@@ -63,7 +63,7 @@
                             <!--begin::Card header-->
                             <div class="card-header">
                                 <div class="card-title">
-                                    <h2>Add Places</h2>
+                                    <h2>@lang('str.Add Places')</h2>
                                 </div>
                             </div>
                             <!--end::Card header-->
@@ -73,7 +73,7 @@
                                 <div class="col-sm-12 col-md-6 col-lg-3 mb-10">
                                     <!--begin::Label-->
                                     <label for="title"
-                                           class="required form-label">Title</label>
+                                           class="required form-label">@lang('str.Places Name')</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input id="title" type="text" name="title"
